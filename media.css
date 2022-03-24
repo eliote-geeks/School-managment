@@ -1,0 +1,60 @@
+body{
+	background: #fff;
+	font-family: 'Poppins';
+	font-size: 15px;
+}
+#banner, #menurigth,#footer,button{
+	display: none;
+}
+img{
+	border-radius: 50%;
+}
+.c{
+	top: 0;
+	display: block;
+}
+ .c div{
+	display: inline-table;	
+	
+}
+.c .logo img{
+	width: 100%;
+	position: relative;
+}
+.c .titre1 p, .titre2 p{
+	font-family: "poppins";
+	line-height: 3pt;
+	text-align:center;
+	margin: 10pt;
+	font-size: 10pt;
+	padding: 0;
+}
+
+p,h1{
+	font-family: "poppins";
+	line-height: 15pt;
+	margin:5px ;
+	text-align:center;
+	margin: 10pt;
+	font-size: 15pt;
+	padding: 0;
+}
+img{
+	width: 25%;
+}
+
+a{
+	display: none;
+}
+
+span{
+	font-family: "poppins";
+	line-height: 15pt;
+	margin:5px ;
+	text-align:center;
+	margin: 10pt;
+	font-size: 15pt;
+	padding: 0;
+	color: green;	
+	font-weight: bold;
+}

@@ -1,0 +1,4 @@
+RewriteEngine On
+
+RewriteRule ^gims?$ login.php
+RewriteRule ^index/([0-9]+) index.php?id=$1

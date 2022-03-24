@@ -1,0 +1,39 @@
+*{
+
+	font-family: sans-serif;
+}
+
+body{
+	background:linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0.6)), url('i.jpg');
+	background-size: contain;
+	width: 100%;
+	max-width: 100%;
+	background-attachment: fixed;
+}
+h1{
+	text-transform: uppercase;
+	font-family: sans-serif;
+	letter-spacing: 4px;
+	color: #eee;
+	font-size: 60px;
+	margin: 60px;
+}
+
+
+h5{
+	display:grid;
+}
+p{
+	font-weight: 300;
+	text-transform: uppercase;
+	margin: 10px auto;
+	color: #eee;
+}
+.mail input{
+	width: 800px;
+	display:table-column-group;
+}
+button{
+	text-transform: uppercase;
+}
+

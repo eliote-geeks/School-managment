@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+	<meta charset="utf-8">
+	<title>espce menbre</title>
+	<meta name="viewport" content="width-device=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="style.2.css">
+	<!-- LIEN BOXICON.COM -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+
+</head>
+<body>
+<div class="sidebar">
+	<div class="logo_content">
+		<div class="logo">
+			<i class="bx bxl-c-plus-plus"></i>
+			<div class="logo_name">PAUL</div>
+		</div>
+		<i class='bx bx-menu-alt-left' id="btn"></i>
+	</div>
+	<ul class="nav_list">
+		<li>
+				<i class="bx bx-search"></i>
+				<input type="" name="" placeholder="recherche..">
+			<span class="tooltip">recherche</span>
+		</li>
+
+		<li>
+			<a href="">
+				<i class='bx bxs-dashboard bx-tada bx-rotate-90' ></i>
+				<span class="links_name">dashboard</span>
+			</a>
+			<span class="tooltip">dashboard</span>
+		</li>
+
+		<li>
+			<a href="dash.php">
+				<i class="bx bx-user"></i>
+				<span class="links_name">User</span>
+			</a>
+			<span class="tooltip">User</span>
+		</li>
+
+		<li>
+			<a href="">
+				<i class="bx bx-chat"></i>
+				<span class="links_name">messages</span>
+			</a>
+			<span class="tooltip">messages</span>
+		</li>
+
+		<li>
+			<a href="">
+				<i class="bx bx-pie-chart-alt-2"></i>
+				<span class="links_name">Analytics</span>
+			</a>
+			<span class="tooltip">Analytics</span>
+		</li>
+
+		<li>
+			<a href="">
+				<i class="bx bx-folder"></i>
+				<span class="links_name">File manager</span>
+			</a>
+			<span class="tooltip">File</span>
+		</li>
+
+		<li>
+			<a href="">
+				<i class="bx bx-heart"></i>
+				<span class="links_name">Saved</span>
+			</a>
+			<span class="tooltip">Saved</span>
+		</li>
+
+		<li>
+			<a href="edition.php">
+				<i class="bx bx-cog"></i>
+				<span class="links_name">Setting</span>
+			</a>
+			<span class="tooltip">Setting</span>
+		</li>
+	</ul>
+	<div class="profile_content">
+		<div class="profile">
+			<div class="profile_details">
+				<img src="horror.jpeg" alt="">
+				<div class="name_job">
+					<div class="name">Prem Shabi</div>
+					<div class="job">Web Master</div>
+				</div>
+				 <a style="color:white;" onclick="" href="deconnexion.php"><i class="bx bx-log-out" id="log_out"></i></a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="home_content">
+	<div class="text">Home Content</div>
+</div>
+<script type="text/javascript">
+	let btn = document.querySelector("#btn");
+	let sidebar = document.querySelector(".sidebar");
+	let searchbtn = document.querySelector(".bx-search");
+	btn.onclick = ()=>{
+		sidebar.classList.toggle("active");
+	}
+
+
+	searchbtn.onclick = ()=>{
+		sidebar.classList.toggle("active");
+	}
+	let conf = document.querySelector('#log_out').addEventListener("click",(e)=>{
+			if (!(confirm('voulez-vous vraiment etre deconnecte: '))) {
+			e.preventDefault();
+			return false;
+		}
+		
+	});
+</script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+
+  class DB{
+    private $dbhost  = "127.0.0.1";
+    private $dbusername = "root";
+    private $dbpassword = "";
+    private $dbname = "espace_menbre";
+    private $tblname = "mobile_numbers";
+
+    public function _construct(){
+        if (isset($this->db)) {
+            #connect to db
+            $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_menbre;charset=utf8','root','');
+            if ($bdd->connect_error) {
+                die("Failed to connect width Mysql: ".$bdd->connect_error);
+            }
+                else{
+                    $this->db = $bdd;
+                }
+        }
+    }
+
+        public function checkRow($conditions = array()){
+            $sql = 'SELECT * FROM '.$this->tblname;
+            if (!empty($conditions)&& is_array($conditions)) {
+                $sql .= 'WHERE ';
+                $i = 0;
+                foreach ($conditions as $key => $value) {
+                    $pre = ($i > 0)?' AND ':' ';
+                    $sql .= $pre.$key." = '".$value."'";
+                    $i++;
+                }
+            }
+            $result = $this->db->query($sql);
+            return !empty($result->num_rows > 0)?true:false;
+        }
+
+
+
+        public function insert($data)
+        {
+            if (!empty($data)  && is_array($data)) {
+                $colums = '';
+                $values = '';
+                $i = 0;
+                foreach ($data as $key => $val) {
+                    $pre = ($i > 0)?', ':'';
+                    $values .=$pre."'".$val."'" ;
+                    $i++;
+                }
+                $query = "INSERT INTO ".$this->tblname." (".$colums.") VALUES(".$values.")";
+                    $insert = $this->db->query($query);
+                    return $insert?$this->db->insert_id:false;                
+            }
+            else{
+                return false;
+            }
+        }
+
+
+
+
+        public function update($date,$conditions){
+            if (!empty($data) && is_array($data)) {
+                $colvalSet = '';
+                $whereSql = '';
+                $i = 0;
+                foreach ($data as $key => $val) {
+                    $pre = ($i > 0)?',':'';
+                    $colvalSet .= $pre.$key."='".$val."'";
+                    $i++;
+                }
+                if (!empty($conditions)&& is_array($conditions)) {
+                    $whereSql .= ' WHERE ';
+                    $i = 0;
+                    foreach ($conditions as $key => $value) {
+                        $pre = ($i > 0)?' AND ' : '';
+                           $whereSql .= $pre.$key.="= '".$value."'";
+                        $i++;
+                    }
+                }
+                $query = "UPDATE ".$this->tblname." SET ".$colvalSet.$whereSql;
+                $update = $this->db->query($query);
+                return $update?$this->db->affected_rows:false;
+            }
+            else{
+                return false;
+            }
+        }
+}
+
+function sendSMS($senderID,$recipient_no, $message){
+    $requestparams = array(
+        'user' => 'abcd',
+        'apikey' => 'dssf645fddfgh565',
+        'senderID' =>$senderID,
+        'recipient_no' => $recipient_no,
+        'message' =>$message
+    );
+
+
+    //Merge API url and parameters
+    $apiUrl = "http://api.example.com/http/sendsms?";
+    foreach ($$requestparams as $key => $val) {
+        $apiUrl .= $key.'='.urldecode($val).'&';
+    }
+    $apiUrl = rtrim($apiUrl,"&");
+
+
+    // API CALL
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $apiUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+    $reponse = curl_exec($ch);
+    curl_close($ch);
+
+    //Return curl response
+    return $reponse;
+}
