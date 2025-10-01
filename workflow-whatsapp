@@ -1,0 +1,169 @@
+{
+  "name": "Agent WhatsApp Gemini",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-gemini",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-whatsapp",
+      "name": "Webhook WhatsApp",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Extraire les données WhatsApp\nconst message = $json.body?.message || $json.message ||
+  'Message vide';\nconst from = $json.body?.from || $json.from || 'unknown';\nconst instanceId =
+$json.body?.instanceId || 'main';\n\n// Nettoyer le numéro de téléphone\nconst cleanPhone = from.replace('@c.us',
+'').replace(/\\D/g, '');\n\n// Log pour debug\nconsole.log('Message reçu:', message);\nconsole.log('De:',
+from);\n\nreturn [{\n  userMessage: message,\n  phoneNumber: from,\n  cleanPhone: cleanPhone,\n  instanceId:
+instanceId,\n  timestamp: new Date().toISOString(),\n  systemPrompt: `Tu es un assistant WhatsApp intelligent et
+amical.\n\nRègles importantes:\n- Réponds en français\n- Sois concis (maximum 150 mots)\n- Sois amical et
+professionnel\n- Si c'est une salutation, réponds chaleureusement\n- Pour les questions techniques, sois précis\n-
+  Utilise des emojis avec modération\n- Si tu ne sais pas, dis-le clairement\n\nMessage à traiter:
+\"${message}\"`\n}];"
+      },
+      "id": "function-process",
+      "name": "Traiter Message",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "model": "gemini-1.5-pro",
+        "options": {
+          "systemMessage": "={{ $json.systemPrompt }}",
+          "maxOutputTokens": 300,
+          "temperature": 0.7,
+          "topK": 40,
+          "topP": 0.95
+        }
+      },
+      "id": "gemini-chat",
+      "name": "Gemini Response",
+      "type": "n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [680, 300],
+      "credentials": {
+        "googleGeminiApi": {
+          "id": "google-gemini-api",
+          "name": "Google Gemini API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://evolution-api:8080/message/sendText/{{ $('Traiter Message').item.json.instanceId }}",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "EvoApi-2025-SecureKey-n8n-Integration"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Traiter Message').item.json.phoneNumber }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $('Gemini Response').item.json.content }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000,
+          "retry": {
+            "enabled": true,
+            "maxAttempts": 3
+          }
+        }
+      },
+      "id": "send-whatsapp",
+      "name": "Envoyer WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Log de la réponse pour debug\nconst response = $json;\nconsole.log('Réponse Evolution
+API:', JSON.stringify(response, null, 2));\n\nreturn [{\n  success: response.status === 'success' ||
+response.statusCode === 200,\n  response: response,\n  timestamp: new Date().toISOString(),\n  message: 'Message
+envoyé avec succès'\n}];"
+      },
+      "id": "function-log",
+      "name": "Log Résultat",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1120, 300]
+    }
+  ],
+  "connections": {
+    "Webhook WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Traiter Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Traiter Message": {
+      "main": [
+        [
+          {
+            "node": "Gemini Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Response": {
+      "main": [
+        [
+          {
+            "node": "Envoyer WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Envoyer WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Log Résultat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "Europe/Paris"
+  },
+  "tags": ["whatsapp", "gemini", "ai-agent"]
+}
